@@ -33,11 +33,13 @@ class Rook(Chess_Piece):
         else:
             if self.color == "Black":
                 self.all_pieces[self.color + "Rook" + self.black_rook_list[0]] = self.pos
+                self.global_name = self.color + "Rook" + self.black_rook_list[0]
                 del self.black_rook_list[0]
             elif self.color == "White":
                 self.all_pieces[self.color + "Rook" + self.white_rook_list[0]] = self.pos
+                self.global_name = self.color + "Rook" + self.white_rook_list[0]
                 del self.white_rook_list[0]
-            self.global_name = self.color + "Rook" + self.white_rook_list[0]
+            
         #legalizing all columns + rows
         pos_x = -1
         pos_y = -1
@@ -102,9 +104,29 @@ class Rook(Chess_Piece):
             else:
                 pos += 1
             #This works well! :D
-
+    def move(self, x, y):
+        pos = str(x) + str(y)
+        previous_x = self.col_x
+        previous_y = self.col_y
+        self.col_x = x
+        self.col_y = y
+        self.legal_move_update()
+        if pos in self.legal_moves:
+            del previous_x
+            del previous_y
+            self.all_pieces[self.global_name] = pos
+            self.pos = pos
+            self.legal_move_update()
+        else:
+            self.col_x = previous_x
+            self.col_y = previous_y
+            print("Illegal Move")
 rook_test_mark = Rook("B", 3, "Black")
 rook_test_mark2 = Rook("C", 3, "White")
 rook_test_mark.legal_move_update()
+rook_test_mark.legal_move_update()
+print(rook_test_mark.global_name, rook_test_mark.pos, rook_test_mark.legal_moves)
+rook_test_mark.move("D",4)
+rook_test_mark.move("B",6)
 print(rook_test_mark.all_pieces)
 print(rook_test_mark.global_name, rook_test_mark.pos, rook_test_mark.legal_moves)

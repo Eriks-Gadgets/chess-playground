@@ -1,4 +1,4 @@
-import PySimpleGUI as sg
+#import PySimpleGUI as sg
 
 #sg.Popup("CHESS PLAYGROUND")
 
@@ -28,18 +28,14 @@ class Rook(Chess_Piece):
                 if i == col_y:
                     legal_row = i
         #initializing the piece, globally
-        if self.color + "Rook" + self.black_rook_list[0] in self.all_pieces:
-            pass
-        else:
-            if self.color == "Black":
-                self.all_pieces[self.color + "Rook" + self.black_rook_list[0]] = self.pos
-                self.global_name = self.color + "Rook" + self.black_rook_list[0]
-                del self.black_rook_list[0]
-            elif self.color == "White":
-                self.all_pieces[self.color + "Rook" + self.white_rook_list[0]] = self.pos
-                self.global_name = self.color + "Rook" + self.white_rook_list[0]
-                del self.white_rook_list[0]
-            
+        if self.color == "Black":
+            self.all_pieces[self.color + "Rook" + self.black_rook_list[0]] = self.pos
+            self.global_name = self.color + "Rook" + self.black_rook_list[0]
+            del self.black_rook_list[0]
+        elif self.color == "White":
+            self.all_pieces[self.color + "Rook" + self.white_rook_list[0]] = self.pos
+            self.global_name = self.color + "Rook" + self.white_rook_list[0]
+            del self.white_rook_list[0]
         #legalizing all columns + rows
         pos_x = -1
         pos_y = -1
@@ -91,7 +87,12 @@ class Rook(Chess_Piece):
         pos = 0
         for i in legal_moves:
             if i in self.all_pieces.values() and i != self.pos:
-                legal_moves[pos] = str(legal_moves[pos][0]) + "x" + str(legal_moves[pos][1])
+                for j in self.all_pieces:
+                    if self.all_pieces[j] == i:
+                        if self.color in j:
+                            pass
+                        else:
+                            legal_moves[pos] = str(legal_moves[pos][0]) + "x" + str(legal_moves[pos][1])
             else:
                 pos += 1
         self.legal_moves = legal_moves
@@ -110,7 +111,6 @@ class Rook(Chess_Piece):
         previous_y = self.col_y
         self.col_x = x
         self.col_y = y
-        self.legal_move_update()
         if pos in self.legal_moves:
             del previous_x
             del previous_y
@@ -121,12 +121,13 @@ class Rook(Chess_Piece):
             self.col_x = previous_x
             self.col_y = previous_y
             print("Illegal Move")
-rook_test_mark = Rook("B", 3, "Black")
-rook_test_mark2 = Rook("C", 3, "White")
-rook_test_mark.legal_move_update()
-rook_test_mark.legal_move_update()
-print(rook_test_mark.global_name, rook_test_mark.pos, rook_test_mark.legal_moves)
-rook_test_mark.move("D",4)
-rook_test_mark.move("B",6)
-print(rook_test_mark.all_pieces)
-print(rook_test_mark.global_name, rook_test_mark.pos, rook_test_mark.legal_moves)
+rook1 = Rook("B", 3, "White")
+rook2 = Rook("C", 3, "White")
+rook3 = Rook("D", 3, "White")
+rook1.legal_move_update()
+rook2.legal_move_update()
+rook3.legal_move_update()
+print(rook1.all_pieces)
+print(rook1.global_name, rook1.pos, rook1.legal_moves)
+rook1.move("B",7)
+print(rook1.global_name, rook1.pos, rook1.legal_moves)
